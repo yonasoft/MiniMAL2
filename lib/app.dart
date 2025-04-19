@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'core/config/theme.dart';
+import 'core/config/router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MiniMALApp extends StatelessWidget {
+// Theme mode provider for toggling between light and dark theme
+final themeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
+
+class MiniMALApp extends ConsumerWidget {
   const MiniMALApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: Scaffold()
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the theme mode from the provider
+    final themeMode = ref.watch(themeProvider);
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
+      title: 'mini MAL',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
     );
   }
 }
-
